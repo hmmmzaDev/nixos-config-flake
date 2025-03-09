@@ -18,30 +18,12 @@
   drivers = [
     "amdgpu"
     "intel"
-    # "nvidia"
-    # "amdcpu"
-    # "intel-old"
   ];
 
-  /*
-    These will be imported after the default modules and override/merge any conflicting options
-    !Its very possible to break hydenix by overriding options
-    eg:
-      # lets say hydenix has a default of:
-      {
-        services.openssh.enable = true;
-        environment.systemPackages = [ pkgs.vim ];
-      }
-      # your module
-      {
-        services.openssh.enable = false;  #? This wins by default (last definition)
-        environment.systemPackages = [ pkgs.git ];  #? This gets merged with hydenix
-      }
-  */
   # List of nix modules to import in ./hosts/nixos/default.nix
   nixModules = [
-    (toString ./my-module.nix)
-    (toString ./packages.nix)
+    (toString ./system-config/overrides.nix)
+    (toString ./system-config/packages.nix)
   ];
   # List of nix modules to import in ./lib/mkConfig.nix
   homeModules = [
@@ -133,5 +115,8 @@
     # 30GB minimum for one theme - 50GB for multiple themes - more for development and testing
     diskSize = 20000;
   };
+
+
+
 
 }

@@ -23,17 +23,30 @@
     })
   ];
 
-  /* networking = {
-    networkmanager = {
-      enable = true;
-      # Optional: use iwd backend for potentially better behavior
-      wifi.backend = "iwd";
-    };
-  }; */
+security.polkit.enable = true;
 
-  # Instead of the problematic configuration, just ensure NetworkManager stores connections
-  # networking.networkmanager.ensureProfiles.profiles = {};
+systemd.user.services.polkit-gnome-authentication-agent-1 = {
+  description = "polkit-gnome-authentication-agent-1";
+  wantedBy = [ "graphical-session.target" ];
+  wants = [ "graphical-session.target" ];
+  after = [ "graphical-session.target" ];
+  serviceConfig = {
+    Type = "simple";
+    ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+    Restart = "on-failure";
+    RestartSec = 1;
+    TimeoutStopSec = 10;
+  };
+};
 
-  # Use hardcoded username
-  users.users.hamza.extraGroups = [ "networkmanager" "wheel" ];
+
+  #mount the manjaro partition on boot
+fileSystems."/run/media/hamza" = {
+  device = "/dev/disk/by-uuid/26a05160-867c-4407-b621-0b7cb21e31c0";
+  fsType = "ext4";
+    options = [ "defaults" ];
+};
+
+
+
 }
