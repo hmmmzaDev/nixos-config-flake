@@ -26,9 +26,43 @@
     (toString ./system-config/packages.nix)
   ];
   # List of nix modules to import in ./lib/mkConfig.nix
-  homeModules = [
-    # (toString ./my-module.nix)
-  ];
+homeModules = [
+  ({ pkgs, lib, ... }: {
+    programs.zsh = {
+      initExtra = ''
+          export ANDROID_HOME="/home/hamza/Android/Sdk"
+          export ANDROID_SDK_ROOT="/home/hamza/Android/Sdk"
+          export CODE_DIR="/run/media/hamza/home/hamza/local/code"
+      '';
+    };
+
+    home.sessionVariables = {
+      CODE_DIR = "/run/media/hamza/home/hamza/local/code";
+    };
+
+    home.file.".config/waybar" = lib.mkForce {
+      source = ./waybar-config;
+      recursive = true;
+      force = true;
+      mutable = true;
+    };
+
+    home.file.".config/hypr" = lib.mkForce {
+      source = ./hypr-config;
+      recursive = true;
+      force = true;
+      mutable = true;
+    };
+
+/* wayland.windowManager.hyprland = {
+  enable = true;
+  extraConfig = ''
+    monitor=,preferred,auto,1.5
+  '';
+}; */
+
+  })
+];
 
   hyde = rec {
     sddmTheme = "Candy"; # or "Corners"
@@ -117,6 +151,6 @@
   };
 
 
-
+programs.adb.enable = true;
 
 }

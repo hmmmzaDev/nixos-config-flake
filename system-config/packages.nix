@@ -33,6 +33,7 @@
 
 
     nodejs
+    deno
     pnpm
     typescript
     vtsls
@@ -49,6 +50,19 @@
 
     code-cursor
 
+    python3
+    micromamba
+
+
+    # signal-desktop
+
+    android-tools
+    gradle
+    jdk17
+    androidenv.androidPkgs.platform-tools
+    # android-sdk
+
+
   ];
 
 
@@ -56,13 +70,16 @@
 
   programs.nix-ld.enable = true;
 programs.nix-ld.libraries = [];
-
+services.tor = {
+  enable = true;
+  client.enable = true;
+};
 
   virtualisation.docker = {
     enable = true;
     enableOnBoot = true;
   };
-  users.users.hamza.extraGroups = [ "networkmanager" "wheel" "docker" ];
+  users.users.hamza.extraGroups = [ "networkmanager" "wheel" "docker" "adbusers" "kvm" ];
   # virtualisation.docker.enable = true;
   /* systemd.services.docker = {
     description = "Docker Daemon";
